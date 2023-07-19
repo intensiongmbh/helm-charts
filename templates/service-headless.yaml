@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "keycloak.fullname" . }}-headless
+  annotations:
+    {{- range $key, $val := .Values.service.headless.annotations }}
+    {{- printf "%s: %s" $key ($val | quote) | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "keycloak.labels" . | nindent 4 }}
+    app.kubernetes.io/component: headless
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "keycloak.selectorLabels" . | nindent 4 }}
