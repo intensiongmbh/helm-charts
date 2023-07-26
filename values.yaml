@@ -146,6 +146,15 @@ rbac:
       resources: ["pods"]
       verbs: ["get", "list"]
 
+# Pod disruption budget
+podDisruptionBudget: {}
+# maxUnavailable: 1
+# minAvailable: 1
+# unhealthyPodEvictionPolicy: ""
+
+podDisruptionBudgetAnnotations: {}
+podDisruptionBudgetLabels: {}
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
