@@ -3,24 +3,141 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+image:
+  repository: quay.io/keycloak/keycloak
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "22.0.1"
+  # Overrides the image tag with a specific digest
+  digest: ""
+
+http:
+  relativePath: /auth
+
+proxy:
+  enabled: false
+  mode: ""
+
+database:
+  # Use an existing secret for database password. This takes precedence over password.
+  existingSecret: ""
+  existingSecretKey: ""
+  # Can be dev-file, dev-mem, mariadb, mssql, mysql, oracle, postgres
+  vendor: ""
+  hostname: ""
+  port: ""
+  database: ""
+  username: ""
+  password: ""
+
+metrics:
+  enabled: true
+
+health:
+  enabled: true
+
+statefulSet:
+  # Annotations to add to the StatefulSet
+  annotations: {}
+  # Labels to add to the StatefulSet
+  labels: {}
+
+# Annotations to add to the Pod
+podAnnotations: {}
+
+# Labels to add to the Pod
+podLabels: {}
+
 # Update strategy of the StatefulSet
 updateStrategy: RollingUpdate
+
 # Restart policy of the StatefulSet
 restartPolicy: Always
 
-statefulSet:
-  annotations: {}
+# Control how pods are created during initial scale up, replacement or when scaling down. Either "OrderedReady" or "Parallel".
+podManagementPolicy: OrderedReady
+
+# Pod wide SecurityContext. Defines security options the container shold be run with.
+podSecurityContext:
+  fsGroup: 1000
+
+# SecurityContext for the main container.
+securityContext:
+  runAsUser: 1000
+  runAsNonRoot: true
+
+# Override the default entrypoint of the Keycloak container
+command: []
+
+# Override the default args for the Keycloak container
+args: []
+
+# Extra environment variables for Keycloak
+extraEnv: ""
+
+# Get extra environment variables for Keycloak from ConfigMap or Secret
+extraEnvFrom: ""
+
+# Specify the node for the pod to be scheduled on.
+nodeSelector: {}
+affinity: {}
+tolerations: []
+
+# If specified, indicates the pod's priority.
+priorityClassName: ""
+
+# Termination grace period in seconds for Keycloak shutdown. In clusters with a large cache Infinispan might need time to rebalance
+terminationGracePeriodSeconds: 60
+
+# Mapped IPs and hostnames that will be injected into Pod's hosts files
+hostAliases: []
+# - ip: "10.20.30.40"
+#   hostname:
+#     - "abc.domain.com"
+
+# Extra ports for the pod
+extraPorts: []
+
+# Describe how a group of pods can spread across topology domains.
+topologySpreadConstraings: []
+
+enableServiceLinks: true
+
+# Liveness probe configuration
+livenessProbe: |
+  httpGet:
+    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/live'
+    port: http
+  initialDelaySeconds: 0
+  timeoutSeconds: 5
+
+# Readiness probe configuration
+readinessProbe: |
+  httpGet:
+    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/ready'
+    port: http
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+
+# Startup probe configuration
+startupProbe: |
+  httpGet:
+    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health'
+    port: http
+  initialDelaySeconds: 15
+  timeoutSeconds: 1
+  failureThreshold: 60
+  periodSeconds: 5
+
+# Extra volumes, e.g. for additional themes
+extraVolumes: ""
+
+# Extra volume mounts, e.g. for additional themes
+extraVolumeMounts: ""
 
 rbac:
   enable: true
@@ -42,19 +159,6 @@ serviceAccount:
   # Automount API token for the service account
   automountServiceAccountToken: true
 
-podAnnotations: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
 service:
   # Annotations to add to the http service
   annotations: {}
@@ -74,7 +178,7 @@ service:
   httpNodePort: null
   # the https Port of the service if its type is NodePort
   httpsNodePort: null
-  # Specify extra ports
+  # Specify extra ports for the service
   extraPorts: []
   # Restrict source ranges allowed to connect to the loadbalancer
   # if service is of type loadbalancer
@@ -124,9 +228,3 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
   labels: {}
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
