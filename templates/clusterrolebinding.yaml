@@ -1,4 +1,4 @@
-{{- if and .Values.serviceAccount.create .Values.rbac.enable }}
+{{- if and .Values.serviceAccount.create .Values.serviceAccount.rbac.enable }}
 kind: ClusterRoleBinding
 metadata:
   name: jroupgs-kubeping-api-access-{{ .Release.Namespace}}
