@@ -1,113 +1,118 @@
-# Default values for keycloak.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+## @section Common parameters
 
-replicaCount: 1
+## @param imagePullSecrets Image pull secrets (e.g. when using an image from a private repository)
 imagePullSecrets: []
+## @param nameOverride Override the name
 nameOverride: ""
+## @param fullnameOverride Override the fully qualified domain
 fullnameOverride: ""
 
+## @section Keycloak parameters
+
 image:
+  ## @param image.repository The image repository for the Keycloak container
   repository: quay.io/keycloak/keycloak
+  ## @param image.pullPolicy Pull policy of the image used for Keycloak
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  ## @param image.tag Overrides the image tag whose default is the chart appVersion.
   tag: "22.0.1"
-  # Overrides the image tag with a specific digest
+  ## @param image.digest Overrides the image tag with a specific digest
   digest: ""
 
-http:
-  relativePath: /auth
-
-proxy:
-  enabled: false
-  mode: ""
-
-database:
-  # Use an existing secret for database password. This takes precedence over password.
-  existingSecret: ""
-  existingSecretKey: ""
-  # Can be dev-file, dev-mem, mariadb, mssql, mysql, oracle, postgres
-  vendor: ""
-  hostname: ""
-  port: ""
-  database: ""
-  username: ""
-  password: ""
-
-metrics:
-  enabled: true
-
-health:
-  enabled: true
-
-statefulSet:
-  # Annotations to add to the StatefulSet
-  annotations: {}
-  # Labels to add to the StatefulSet
-  labels: {}
-
-# Annotations to add to the Pod
-podAnnotations: {}
-
-# Labels to add to the Pod
-podLabels: {}
-
-# Update strategy of the StatefulSet
-updateStrategy: RollingUpdate
-
-# Restart policy of the StatefulSet
-restartPolicy: Always
-
-# Control how pods are created during initial scale up, replacement or when scaling down. Either "OrderedReady" or "Parallel".
-podManagementPolicy: OrderedReady
-
-# Pod wide SecurityContext. Defines security options the container shold be run with.
-podSecurityContext:
-  fsGroup: 1000
-
-# SecurityContext for the main container.
-securityContext:
-  runAsUser: 1000
-  runAsNonRoot: true
-
-# Override the default entrypoint of the Keycloak container
-command: []
-
-# Override the default args for the Keycloak container
-args: []
-
-# Extra environment variables for Keycloak
-extraEnv: ""
-
-# Get extra environment variables for Keycloak from ConfigMap or Secret
-extraEnvFrom: ""
-
-# Specify the node for the pod to be scheduled on.
-nodeSelector: {}
-affinity: {}
-tolerations: []
-
-# If specified, indicates the pod's priority.
-priorityClassName: ""
-
-# Termination grace period in seconds for Keycloak shutdown. In clusters with a large cache Infinispan might need time to rebalance
-terminationGracePeriodSeconds: 60
-
-# Mapped IPs and hostnames that will be injected into Pod's hosts files
+## @param hostAliases Mapped IPs and hostnames that will be injected into Pod's hosts files
 hostAliases: []
 # - ip: "10.20.30.40"
 #   hostname:
 #     - "abc.domain.com"
 
-# Extra ports for the pod
+http:
+  ## @param http.relativePath
+  relativePath: /auth
+
+## @param command Override the default entrypoint of the Keycloak container
+command: []
+
+## @param args Override the default args for the Keycloak container
+args: []
+
+## @param extraEnv Extra environment variables for Keycloak
+extraEnv: ""
+
+## @param extraEnvFrom Get extra environment variables for Keycloak from ConfigMap or Secret
+extraEnvFrom: ""
+
+## @section Keycloak deployment parameters
+
+## @param replicaCount Number of replicas in the StatefulSet
+replicaCount: 1
+
+## @param updateStrategy Update strategy of the StatefulSet
+updateStrategy: RollingUpdate
+
+## @param restartPolicy Restart policy of the StatefulSet
+restartPolicy: Always
+
+## @param podManagementPolicy Control how pods are created during initial scale up, replacement or when scaling down. Either "OrderedReady" or "Parallel".
+podManagementPolicy: OrderedReady
+
+proxy:
+  ## @param proxy.enabled Enable proxy address forwarding if Keycloak is behind a reverse proxy
+  enabled: false
+  ## @param proxy.mode Specify the proxy mode. Can be "none", "edge", "reencrypt" or "passthrough"
+  mode: ""
+
+metrics:
+  ## @param metrics.enabled Enable Keycloak's metrics endpoint
+  enabled: true
+
+health:
+  ## @param health.enabled Enable Keycloak's helath endpoint
+  enabled: true
+
+statefulSet:
+  ## @param statefulSet.annotations Annotations to add to the StatefulSet
+  annotations: {}
+  ## @param statefulSet.labels Labels to add to the StatefulSet
+  labels: {}
+
+## @param podAnnotations Annotations to add to the Pod
+podAnnotations: {}
+
+## @param podLabels Labels to add to the Pod
+podLabels: {}
+
+## @param podSecurityContext [object] Pod wide SecurityContext. Defines security options the container shold be run with.
+podSecurityContext:
+  fsGroup: 1000
+
+## @param securityContext [object] Security context for the main container.
+securityContext:
+  runAsUser: 1000
+  runAsNonRoot: true
+
+## @param nodeSelector Specify the node for the pod to be scheduled on.
+nodeSelector: {}
+## @param affinity Affinity for pod assignment
+affinity: {}
+## @param tolerations Tolerations for pod assignment
+tolerations: []
+
+## @param priorityClassName If specified, indicates the pod's priority.
+priorityClassName: ""
+
+## @param terminationGracePeriodSeconds Termination grace period in seconds for Keycloak shutdown. In clusters with a large cache Infinispan might need time to rebalance
+terminationGracePeriodSeconds: 60
+
+## @param extraPorts Extra ports for the pod
 extraPorts: []
 
-# Describe how a group of pods can spread across topology domains.
-topologySpreadConstraings: []
+## @param topologySpreadConstraints Describe how a group of pods can spread across topology domains.
+topologySpreadConstraints: []
 
+## @param enableServiceLinks Indicate whether information about serfices should be injected into pod's environment variables
 enableServiceLinks: true
 
-# Liveness probe configuration
+## @param livenessProbe [string] Liveness probe configuration
 livenessProbe: |
   httpGet:
     path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/live'
@@ -115,7 +120,7 @@ livenessProbe: |
   initialDelaySeconds: 0
   timeoutSeconds: 5
 
-# Readiness probe configuration
+## @param readinessProbe [string] Readiness probe configuration
 readinessProbe: |
   httpGet:
     path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/ready'
@@ -123,7 +128,7 @@ readinessProbe: |
   initialDelaySeconds: 10
   timeoutSeconds: 1
 
-# Startup probe configuration
+## @param startupProbe [string] Startup probe configuration
 startupProbe: |
   httpGet:
     path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health'
@@ -133,91 +138,13 @@ startupProbe: |
   failureThreshold: 60
   periodSeconds: 5
 
-# Extra volumes, e.g. for additional themes
+## @param extraVolumes Extra volumes, e.g. for additional themes
 extraVolumes: ""
 
-# Extra volume mounts, e.g. for additional themes
+## @param extraVolumeMounts Extra volume mounts, e.g. for additional themes
 extraVolumeMounts: ""
 
-rbac:
-  enable: true
-  rules:
-    - apiGroups: [""]
-      resources: ["pods"]
-      verbs: ["get", "list"]
-
-# Pod disruption budget
-podDisruptionBudget: {}
-# maxUnavailable: 1
-# minAvailable: 1
-# unhealthyPodEvictionPolicy: ""
-
-podDisruptionBudgetAnnotations: {}
-podDisruptionBudgetLabels: {}
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # Labels to add to the service account
-  labels: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-  # Automount API token for the service account
-  automountServiceAccountToken: true
-
-service:
-  # Annotations to add to the http service
-  annotations: {}
-  headless:
-    # Annotations to add to the headless serivce
-    annotations: {}
-  # Labels to add to the http and the headless services
-  labels: {}
-  type: ClusterIP
-  # Optional IP for service of type loadbalancer
-  loadBalancerIP: ""
-  # the http Port of the service
-  httpPort: 80
-  # the https Port of the service
-  httpsPort: 443
-  # the http Port of the service if its type is NodePort
-  httpNodePort: null
-  # the https Port of the service if its type is NodePort
-  httpsNodePort: null
-  # Specify extra ports for the service
-  extraPorts: []
-  # Restrict source ranges allowed to connect to the loadbalancer
-  # if service is of type loadbalancer
-  loadBalancerSourceRanges: []
-  # If set to "Local", the proxy assumes that external load balancers
-  # will take care of balancing the service traffic between nodes and
-  # won't masquerade the client source IP.
-  # If set to "Cluster" the standard behavior of routing will be used.
-  externalTrafficPolicy: "Cluster"
-  # Session Affinity
-  sessionAffinity: ""
-  # Session Affinity Config
-  sessionAffinityConfig: {}
-
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
+## @param resources The source limits for Keycloak
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -230,10 +157,122 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+## @param podDisruptionBudget Pod disruption budget
+podDisruptionBudget: {}
+# maxUnavailable: 1
+# minAvailable: 1
+# unhealthyPodEvictionPolicy: ""
+
+## @param podDisruptionBudgetAnnotations Annotations for the pod disruption budget
+podDisruptionBudgetAnnotations: {}
+## @param podDisruptionBudgetLabels Labels for the pod disruption budget
+podDisruptionBudgetLabels: {}
+
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a service account should be created
+  create: true
+  ## @param serviceAccount.annotations Annotations to add to the service account
+  annotations: {}
+  ## @param serviceAccount.labels Labels to add to the service account
   labels: {}
+  ## @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Automount API token for the service account
+  automountServiceAccountToken: true
+
+  rbac:
+    ## @param serviceAccount.rbac.enable Enable the creation of ClusterRole and ClusterRoleBinding for the service account to be able to get and list pods
+    enable: true
+    ## @param serviceAccount.rbac.rules [array] The rules for the ClusterRole
+    rules:
+      - apiGroups: [""]
+        resources: ["pods"]
+        verbs: ["get", "list"]
+
+autoscaling:
+  ## @param autoscaling.enabled Enable autoscaling for Keycloak
+  enabled: false
+  ## @param autoscaling.minReplicas Minimum number of replicas to scale back
+  minReplicas: 1
+  ## @param autoscaling.maxReplicas Maximum number of replicas to scale up
+  maxReplicas: 100
+  ## @param autoscaling.targetCPUUtilizationPercentage Target CPU utilization percentage
+  targetCPUUtilizationPercentage: 80
+  ## @param autoscaling.targetMemoryUtilizationPercentage Target Memory utilization percentage
+  targetMemoryUtilizationPercentage:
+  ## @param autoscaling.labels Labels for the HPA
+  labels: {}
+
+## @section Database parameters
+
+database:
+  ## @param database.existingSecret Use an existing secret for database password. This takes precedence over password.
+  existingSecret: ""
+  ## @param database.existingSecretKey
+  existingSecretKey: ""
+  ## @param database.vendor Can be dev-file, dev-mem, mariadb, mssql, mysql, oracle, postgres
+  vendor: ""
+  ## @param database.hostname Hostname of the database
+  hostname: ""
+  ## @param database.port Port of the database
+  port: ""
+  ## @param database.database The name of the database
+  database: ""
+  ## @param database.username Username of the database
+  username: ""
+  ## @param database.password Password of the database. Ignored if existing secret is set
+  password: ""
+
+## @section Keycloak exposure parameters
+
+service:
+  ## @param service.annotations Annotations to add to the http service
+  annotations: {}
+  headless:
+    ## @param service.headless.annotations Annotations to add to the headless serivce
+    annotations: {}
+  ## @param service.labels Labels to add to the http and the headless services
+  labels: {}
+  ## @param service.type Specify the type of the service
+  type: ClusterIP
+  ## @param service.loadBalancerIP Optional IP for service of type loadbalancer
+  loadBalancerIP: ""
+  ## @param service.httpPort The http Port of the service
+  httpPort: 80
+  ## @param service.httpsPort The https Port of the service
+  httpsPort: 443
+  ## @param service.httpNodePort The http Port of the service if its type is NodePort
+  httpNodePort: null
+  ## @param service.httpsNodePort The https Port of the service if its type is NodePort
+  httpsNodePort: null
+  ## @param service.extraPorts Specify extra ports for the service
+  extraPorts: []
+  ## @param service.loadBalancerSourceRanges Restrict source ranges allowed to connect to the loadbalancer if service is of type loadbalancer
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy If set to "Local", the proxy assumes that external load balancers will take care of balancing the service traffic between nodes and won't masquerade the client source IP. If set to "Cluster" the standard behavior of routing will be used.
+  externalTrafficPolicy: "Cluster"
+  ## @param service.sessionAffinity Session Affinity
+  sessionAffinity: ""
+  ## @param service.sessionAffinityConfig Session Affinity Config
+  sessionAffinityConfig: {}
+
+ingress:
+  ## @param ingress.enabled Enable ingress
+  enabled: false
+  ## @param ingress.className Set the ingerssClassName on the ingress record
+  className: ""
+  ## @param ingress.annotations Annotations for the ingress
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  ## @param ingress.hosts [array] List of arbitrary paths to the host
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  ## @param ingress.tls List of TLS secrets
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
