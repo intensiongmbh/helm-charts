@@ -11,9 +11,6 @@
         "autoscaling": {
             "type": "object",
             "properties": {
-                "autoscaling.targetMemoryUtilizationPercentage": {
-                    "type": "integer"
-                },
                 "enabled": {
                     "type": "boolean"
                 },
@@ -28,6 +25,9 @@
                 },
                 "targetCPUUtilizationPercentage": {
                     "type": "integer"
+                },
+                "targetMemoryUtilizationPercentage": {
+                    "type": "null"
                 }
             }
         },
@@ -207,6 +207,9 @@
                     "type": "integer"
                 }
             }
+        },
+        "postinstalljobs": {
+            "type": "array"
         },
         "priorityClassName": {
             "type": "string"

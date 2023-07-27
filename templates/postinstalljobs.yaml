@@ -1,0 +1,36 @@
+{{- range .Values.postinstalljobs }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .name }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": {{ .hookWeight | default 5 }}
+spec:
+  template:
+    metadata:
+      name: {{ .name }}
+    spec:
+      restartPolicy: {{ .restartPolicy }}
+      {{- if .image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .image.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+      {{- range .containers }}
+      - name: {{ .name }}
+        {{- if .image.digest }}
+        image: "{{ .image.repository }}@{{ .image.digest }}"
+        {{- else if .image.tag }}
+        image: "{{ .image.repository }}:{{ .image.tag }}"
+        {{- else }}
+        image: "{{ .image.repository }}:latest"
+        {{- end }}
+        {{- if .image.command }}
+        command: {{ .image.command }}
+        {{- end }}
+        env:
+          {{- toYaml .env | nindent 10 }}
+      {{- end }}
+{{- end }}

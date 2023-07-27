@@ -203,6 +203,28 @@ autoscaling:
   ## @param autoscaling.labels Labels for the HPA
   labels: {}
 
+## @param postinstalljobs Define a list of jobs to be executed after the installation
+postinstalljobs: []
+#- name: job-name
+#  restartPolicy: Never
+#  hookWeight: 5
+#  containers:
+#  - name: realm-creator-container
+#    imagePullSecrets: []
+#    image:
+#      ## @param image.repository The image repository for the realm creator
+#      repository: "repo/image"
+#      ## @param image.pullPolicy Pull policy of the image used for the realm creator
+#      pullPolicy: "IfNotPresent"
+#      ## @param image.tag Set the image tag or latest is used
+#      tag: "0.1.0"
+#      ## @param image.digest Overrides the image tag with a specific digest
+#      digest: ""
+#      command: []
+#    env:
+#    - name: KEYCLOAK_AUTH_URL
+#      value: http://keycloak-headless:8080
+
 ## @section Database parameters
 
 database:
