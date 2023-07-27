@@ -11,6 +11,9 @@
         "autoscaling": {
             "type": "object",
             "properties": {
+                "autoscaling.targetMemoryUtilizationPercentage": {
+                    "type": "integer"
+                },
                 "enabled": {
                     "type": "boolean"
                 },
