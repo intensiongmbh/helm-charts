@@ -132,7 +132,7 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       priorityClassName: {{ .Values.priorityClassName }}
       topologySpreadConstraints:
-        {{- range $key, $val := .Values.topologySpreadConstraings }}
+        {{- range $key, $val := .Values.topologySpreadConstraints }}
         {{- printf "%s: %s" $key ($val | quote) | nindent 4 }}
         {{- end }}
       restartPolicy: {{ .Values.restartPolicy }}
