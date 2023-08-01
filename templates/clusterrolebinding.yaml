@@ -1,5 +1,6 @@
 {{- if and .Values.serviceAccount.create .Values.serviceAccount.rbac.enable }}
 kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: jroupgs-kubeping-api-access-{{ .Release.Namespace}}
   labels:
