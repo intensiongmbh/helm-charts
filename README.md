@@ -21,7 +21,7 @@ Helm Chart for Keycloak by intension
 | `image.tag`         | Overrides the image tag whose default is the chart appVersion.        | `22.0.1`                    |
 | `image.digest`      | Overrides the image tag with a specific digest                        | `""`                        |
 | `hostAliases`       | Mapped IPs and hostnames that will be injected into Pod's hosts files | `[]`                        |
-| `http.relativePath` |                                                                       | `/auth`                     |
+| `http.relativePath` | For compatibility reason this could be set to "/auth"                 | `""`                        |
 | `command`           | Override the default entrypoint of the Keycloak container             | `[]`                        |
 | `args`              | Override the default args for the Keycloak container                  | `[]`                        |
 | `extraEnv`          | Extra environment variables for Keycloak                              | `""`                        |
@@ -38,7 +38,10 @@ Helm Chart for Keycloak by intension
 | `proxy.enabled`                                 | Enable proxy address forwarding if Keycloak is behind a reverse proxy                                                             | `false`         |
 | `proxy.mode`                                    | Specify the proxy mode. Can be "none", "edge", "reencrypt" or "passthrough"                                                       | `""`            |
 | `metrics.enabled`                               | Enable Keycloak's metrics endpoint                                                                                                | `true`          |
-| `health.enabled`                                | Enable Keycloak's helath endpoint                                                                                                 | `true`          |
+| `health.enabled`                                | Enable Keycloak's helath endpoint. This also enables startup, readiness and liveness probes.                                      | `true`          |
+| `livenessProbe`                                 | Liveness probe configuration                                                                                                      | `""`            |
+| `readinessProbe`                                | Readiness probe configuration                                                                                                     | `""`            |
+| `startupProbe`                                  | Startup probe configuration                                                                                                       | `""`            |
 | `statefulSet.annotations`                       | Annotations to add to the StatefulSet                                                                                             | `{}`            |
 | `statefulSet.labels`                            | Labels to add to the StatefulSet                                                                                                  | `{}`            |
 | `podAnnotations`                                | Annotations to add to the Pod                                                                                                     | `{}`            |
@@ -53,9 +56,6 @@ Helm Chart for Keycloak by intension
 | `extraPorts`                                    | Extra ports for the pod                                                                                                           | `[]`            |
 | `topologySpreadConstraints`                     | Describe how a group of pods can spread across topology domains.                                                                  | `[]`            |
 | `enableServiceLinks`                            | Indicate whether information about serfices should be injected into pod's environment variables                                   | `true`          |
-| `livenessProbe`                                 | Liveness probe configuration                                                                                                      | `""`            |
-| `readinessProbe`                                | Readiness probe configuration                                                                                                     | `""`            |
-| `startupProbe`                                  | Startup probe configuration                                                                                                       | `""`            |
 | `extraVolumes`                                  | Extra volumes, e.g. for additional themes                                                                                         | `""`            |
 | `extraVolumeMounts`                             | Extra volume mounts, e.g. for additional themes                                                                                   | `""`            |
 | `resources`                                     | The source limits for Keycloak                                                                                                    | `{}`            |
@@ -111,5 +111,5 @@ Helm Chart for Keycloak by intension
 | `ingress.enabled`                  | Enable ingress                                                                                                                                                                                                                                | `false`     |
 | `ingress.className`                | Set the ingerssClassName on the ingress record                                                                                                                                                                                                | `""`        |
 | `ingress.annotations`              | Annotations for the ingress                                                                                                                                                                                                                   | `{}`        |
-| `ingress.hosts`                    | List of arbitrary paths to the host                                                                                                                                                                                                           | `[]`        |
+| `ingress.rules`                    | List of arbitrary paths to the host                                                                                                                                                                                                           | `[]`        |
 | `ingress.tls`                      | List of TLS secrets                                                                                                                                                                                                                           | `[]`        |

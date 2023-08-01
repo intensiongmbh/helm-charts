@@ -135,7 +135,7 @@
                 "enabled": {
                     "type": "boolean"
                 },
-                "hosts": {
+                "rules": {
                     "type": "array",
                     "items": {
                         "type": "object",

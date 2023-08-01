@@ -6,16 +6,16 @@ metadata:
   name: {{ .name }}
   annotations:
     "helm.sh/hook": post-install
-    "helm.sh/hook-weight": {{ .hookWeight | default 5 }}
+    "helm.sh/hook-weight": {{ .hookWeight | default 5 | quote }}
 spec:
   template:
     metadata:
       name: {{ .name }}
     spec:
       restartPolicy: {{ .restartPolicy }}
-      {{- if .image.imagePullSecrets }}
+      {{- if .imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml .image.imagePullSecrets | nindent 8 }}
+        {{- toYaml .imagePullSecrets | nindent 8 }}
       {{- end }}
       containers:
       {{- range .containers }}
@@ -25,10 +25,16 @@ spec:
         {{- else if .image.tag }}
         image: "{{ .image.repository }}:{{ .image.tag }}"
         {{- else }}
-        image: "{{ .image.repository }}:latest"
+        image: "{{ .repository }}:latest"
         {{- end }}
-        {{- if .image.command }}
-        command: {{ .image.command }}
+        {{- if .command }}
+        command: {{ .command }}
+        {{- end }}
+        {{- if .args }}
+        args:
+          {{- range $arg := .args }}
+          {{- printf "- %s" (tpl $arg $) | nindent 10 }}
+          {{- end }}
         {{- end }}
         env:
           {{- toYaml .env | nindent 10 }}

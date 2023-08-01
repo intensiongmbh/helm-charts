@@ -26,17 +26,23 @@ hostAliases: []
 #     - "abc.domain.com"
 
 http:
-  ## @param http.relativePath
-  relativePath: /auth
+  ## @param http.relativePath For compatibility reason this could be set to "/auth"
+  relativePath: ""
 
 ## @param command Override the default entrypoint of the Keycloak container
 command: []
+# - "command"
 
 ## @param args Override the default args for the Keycloak container
 args: []
+# - "argument"
 
 ## @param extraEnv Extra environment variables for Keycloak
 extraEnv: ""
+# - name: KEYCLOAK_ADMIN
+#   value: admin
+# - name: KEYCLOAK_ADMIN_PASSWORD
+#   value: admin
 
 ## @param extraEnvFrom Get extra environment variables for Keycloak from ConfigMap or Secret
 extraEnvFrom: ""
@@ -66,8 +72,34 @@ metrics:
   enabled: true
 
 health:
-  ## @param health.enabled Enable Keycloak's helath endpoint
+  ## @param health.enabled Enable Keycloak's helath endpoint. This also enables startup, readiness and liveness probes.
   enabled: true
+
+## @param livenessProbe [string] Liveness probe configuration
+livenessProbe: |
+  httpGet:
+    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/live'
+    port: http
+  initialDelaySeconds: 0
+  timeoutSeconds: 5
+
+## @param readinessProbe [string] Readiness probe configuration
+readinessProbe: |
+  httpGet:
+    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/ready'
+    port: http
+  initialDelaySeconds: 10
+  timeoutSeconds: 1
+
+## @param startupProbe [string] Startup probe configuration
+startupProbe: |
+  httpGet:
+    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health'
+    port: http
+  initialDelaySeconds: 15
+  timeoutSeconds: 1
+  failureThreshold: 60
+  periodSeconds: 5
 
 statefulSet:
   ## @param statefulSet.annotations Annotations to add to the StatefulSet
@@ -111,32 +143,6 @@ topologySpreadConstraints: []
 
 ## @param enableServiceLinks Indicate whether information about serfices should be injected into pod's environment variables
 enableServiceLinks: true
-
-## @param livenessProbe [string] Liveness probe configuration
-livenessProbe: |
-  httpGet:
-    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/live'
-    port: http
-  initialDelaySeconds: 0
-  timeoutSeconds: 5
-
-## @param readinessProbe [string] Readiness probe configuration
-readinessProbe: |
-  httpGet:
-    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health/ready'
-    port: http
-  initialDelaySeconds: 10
-  timeoutSeconds: 1
-
-## @param startupProbe [string] Startup probe configuration
-startupProbe: |
-  httpGet:
-    path: '{{ tpl .Values.http.relativePath $ | trimSuffix "/" }}/health'
-    port: http
-  initialDelaySeconds: 15
-  timeoutSeconds: 1
-  failureThreshold: 60
-  periodSeconds: 5
 
 ## @param extraVolumes Extra volumes, e.g. for additional themes
 extraVolumes: ""
@@ -287,8 +293,8 @@ ingress:
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  ## @param ingress.hosts [array] List of arbitrary paths to the host
-  hosts:
+  ## @param ingress.rules [array] List of arbitrary paths to the host
+  rules:
     - host: chart-example.local
       paths:
         - path: /

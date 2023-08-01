@@ -33,6 +33,7 @@ spec:
         {{- range $key, $val := .Values.podLabels }}
         {{- printf "%s: %s" $key ($val | quote) | nindent 8 }}
         {{- end }}
+        {{- include "keycloak.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - name: keycloak
@@ -76,6 +77,14 @@ spec:
         - name: KC_PROXY
           value: {{ .Values.proxy.mode }}
         {{- end }}
+        {{- if .Values.health.enabled }}
+        - name: KC_HEALTH_ENABLED
+          value: "true"
+        {{- end }}
+        {{- if .Values.metrics.enabled }}
+        - name: KC_METRICS_ENABLED
+          value: "true"
+        {{- end }}
         {{- if .Values.database.vendor }}
         - name: KC_DB
           value: {{ .Values.database.vendor }}
@@ -113,12 +122,14 @@ spec:
           {{- tpl .Values.extraVolumeMounts $ | nindent 10 }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
+        {{- if .Values.health.enabled }}
         livenessProbe:
           {{- tpl .Values.livenessProbe $ | nindent 10 }}
         readinessProbe:
           {{- tpl .Values.readinessProbe $ | nindent 10 }}
         startupProbe:
           {{- tpl .Values.startupProbe $ | nindent 10 }}
+        {{- end }}
         securityContext:
           {{- toYaml .Values.securityContext | nindent 10 }}
       imagePullSecrets:
@@ -136,7 +147,7 @@ spec:
         {{- printf "%s: %s" $key ($val | quote) | nindent 4 }}
         {{- end }}
       restartPolicy: {{ .Values.restartPolicy }}
-      terminationGracePeriodSeconds: {{ .Values.restartPolicy }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       hostAliases:
         {{- toYaml .Values.hostAliases | nindent 8 }}
       serviceAccount: {{ include "keycloak.serviceAccountName" . }}
