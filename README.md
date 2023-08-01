@@ -117,3 +117,16 @@ This chart offers the possibility to define jobs that run after the installation
 | `ingress.annotations`              | Annotations for the ingress                                                                                                                                                                                                                   | `{}`        |
 | `ingress.rules`                    | List of arbitrary paths to the host                                                                                                                                                                                                           | `[]`        |
 | `ingress.tls`                      | List of TLS secrets                                                                                                                                                                                                                           | `[]`        |
+
+### Realm creator parameters
+
+This Helm chart provides the possibility to create a realm after Keycloak was deployed. This is done using [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli). All options from realmCreator.options are passed to this cli.
+
+| Name                             | Description                                                                                                                              | Value   |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `realmCreator.enabled`           | Enable the realm creator                                                                                                                 | `false` |
+| `realmCreator.username`          | Specify the username to be used for the Keycloak API                                                                                     | `""`    |
+| `realmCreator.password`          | Password for the Keycloak user                                                                                                           | `""`    |
+| `realmCreator.existingSecret`    | Use an existing secret for Keycloak admin password. This takes precedence over password.                                                 | `""`    |
+| `realmCreator.existingSecretKey` |                                                                                                                                          | `""`    |
+| `realmCreator.options`           | Specify how the realms should be created. See [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli) for more information | `""`    |
