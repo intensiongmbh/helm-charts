@@ -2,6 +2,10 @@
 
 Helm Chart for Keycloak by intension
 
+## Post install jobs
+
+This chart offers the possibility to define jobs that run after the installation. To enforce that it runs after the pod is ready, either use the `--wait` option from `helm install` or define a init container that waits for pod to be ready.
+
 ## Parameters
 
 ### Common parameters
