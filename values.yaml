@@ -19,15 +19,23 @@ image:
   ## @param image.digest Overrides the image tag with a specific digest
   digest: ""
 
-## @param hostAliases Mapped IPs and hostnames that will be injected into Pod's hosts files
-hostAliases: []
-# - ip: "10.20.30.40"
-#   hostname:
-#     - "abc.domain.com"
-
 http:
   ## @param http.relativePath For compatibility reason this could be set to "/auth"
   relativePath: ""
+
+proxy:
+  ## @param proxy.enabled Enable proxy address forwarding if Keycloak is behind a reverse proxy
+  enabled: false
+  ## @param proxy.mode Specify the proxy mode. Can be "none", "edge", "reencrypt" or "passthrough"
+  mode: ""
+
+metrics:
+  ## @param metrics.enabled Enable Keycloak's metrics endpoint
+  enabled: true
+
+health:
+  ## @param health.enabled Enable Keycloak's helath endpoint. This also enables startup, readiness and liveness probes.
+  enabled: true
 
 ## @param command Override the default entrypoint of the Keycloak container
 command: []
@@ -60,20 +68,6 @@ restartPolicy: Always
 
 ## @param podManagementPolicy Control how pods are created during initial scale up, replacement or when scaling down. Either "OrderedReady" or "Parallel".
 podManagementPolicy: OrderedReady
-
-proxy:
-  ## @param proxy.enabled Enable proxy address forwarding if Keycloak is behind a reverse proxy
-  enabled: false
-  ## @param proxy.mode Specify the proxy mode. Can be "none", "edge", "reencrypt" or "passthrough"
-  mode: ""
-
-metrics:
-  ## @param metrics.enabled Enable Keycloak's metrics endpoint
-  enabled: true
-
-health:
-  ## @param health.enabled Enable Keycloak's helath endpoint. This also enables startup, readiness and liveness probes.
-  enabled: true
 
 ## @param livenessProbe [string] Liveness probe configuration
 livenessProbe: |
@@ -134,6 +128,12 @@ priorityClassName: ""
 
 ## @param terminationGracePeriodSeconds Termination grace period in seconds for Keycloak shutdown. In clusters with a large cache Infinispan might need time to rebalance
 terminationGracePeriodSeconds: 60
+
+## @param hostAliases Mapped IPs and hostnames that will be injected into Pod's hosts files
+hostAliases: []
+# - ip: "10.20.30.40"
+#   hostname:
+#     - "abc.domain.com"
 
 ## @param extraPorts Extra ports for the pod
 extraPorts: []

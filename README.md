@@ -23,18 +23,21 @@ Helm Chart for Keycloak by intension
 
 ### Keycloak parameters
 
-| Name                | Description                                                           | Value                       |
-| ------------------- | --------------------------------------------------------------------- | --------------------------- |
-| `image.repository`  | The image repository for the Keycloak container                       | `quay.io/keycloak/keycloak` |
-| `image.pullPolicy`  | Pull policy of the image used for Keycloak                            | `IfNotPresent`              |
-| `image.tag`         | Overrides the image tag whose default is the chart appVersion.        | `22.0.1`                    |
-| `image.digest`      | Overrides the image tag with a specific digest                        | `""`                        |
-| `hostAliases`       | Mapped IPs and hostnames that will be injected into Pod's hosts files | `[]`                        |
-| `http.relativePath` | For compatibility reason this could be set to "/auth"                 | `""`                        |
-| `command`           | Override the default entrypoint of the Keycloak container             | `[]`                        |
-| `args`              | Override the default args for the Keycloak container                  | `[]`                        |
-| `extraEnv`          | Extra environment variables for Keycloak                              | `""`                        |
-| `extraEnvFrom`      | Get extra environment variables for Keycloak from ConfigMap or Secret | `""`                        |
+| Name                | Description                                                                                  | Value                       |
+| ------------------- | -------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.repository`  | The image repository for the Keycloak container                                              | `quay.io/keycloak/keycloak` |
+| `image.pullPolicy`  | Pull policy of the image used for Keycloak                                                   | `IfNotPresent`              |
+| `image.tag`         | Overrides the image tag whose default is the chart appVersion.                               | `22.0.1`                    |
+| `image.digest`      | Overrides the image tag with a specific digest                                               | `""`                        |
+| `http.relativePath` | For compatibility reason this could be set to "/auth"                                        | `""`                        |
+| `proxy.enabled`     | Enable proxy address forwarding if Keycloak is behind a reverse proxy                        | `false`                     |
+| `proxy.mode`        | Specify the proxy mode. Can be "none", "edge", "reencrypt" or "passthrough"                  | `""`                        |
+| `metrics.enabled`   | Enable Keycloak's metrics endpoint                                                           | `true`                      |
+| `health.enabled`    | Enable Keycloak's helath endpoint. This also enables startup, readiness and liveness probes. | `true`                      |
+| `command`           | Override the default entrypoint of the Keycloak container                                    | `[]`                        |
+| `args`              | Override the default args for the Keycloak container                                         | `[]`                        |
+| `extraEnv`          | Extra environment variables for Keycloak                                                     | `""`                        |
+| `extraEnvFrom`      | Get extra environment variables for Keycloak from ConfigMap or Secret                        | `""`                        |
 
 ### Keycloak deployment parameters
 
@@ -44,10 +47,6 @@ Helm Chart for Keycloak by intension
 | `updateStrategy`                                | Update strategy of the StatefulSet                                                                                                | `RollingUpdate` |
 | `restartPolicy`                                 | Restart policy of the StatefulSet                                                                                                 | `Always`        |
 | `podManagementPolicy`                           | Control how pods are created during initial scale up, replacement or when scaling down. Either "OrderedReady" or "Parallel".      | `OrderedReady`  |
-| `proxy.enabled`                                 | Enable proxy address forwarding if Keycloak is behind a reverse proxy                                                             | `false`         |
-| `proxy.mode`                                    | Specify the proxy mode. Can be "none", "edge", "reencrypt" or "passthrough"                                                       | `""`            |
-| `metrics.enabled`                               | Enable Keycloak's metrics endpoint                                                                                                | `true`          |
-| `health.enabled`                                | Enable Keycloak's helath endpoint. This also enables startup, readiness and liveness probes.                                      | `true`          |
 | `livenessProbe`                                 | Liveness probe configuration                                                                                                      | `""`            |
 | `readinessProbe`                                | Readiness probe configuration                                                                                                     | `""`            |
 | `startupProbe`                                  | Startup probe configuration                                                                                                       | `""`            |
@@ -62,6 +61,7 @@ Helm Chart for Keycloak by intension
 | `tolerations`                                   | Tolerations for pod assignment                                                                                                    | `[]`            |
 | `priorityClassName`                             | If specified, indicates the pod's priority.                                                                                       | `""`            |
 | `terminationGracePeriodSeconds`                 | Termination grace period in seconds for Keycloak shutdown. In clusters with a large cache Infinispan might need time to rebalance | `60`            |
+| `hostAliases`                                   | Mapped IPs and hostnames that will be injected into Pod's hosts files                                                             | `[]`            |
 | `extraPorts`                                    | Extra ports for the pod                                                                                                           | `[]`            |
 | `topologySpreadConstraints`                     | Describe how a group of pods can spread across topology domains.                                                                  | `[]`            |
 | `enableServiceLinks`                            | Indicate whether information about serfices should be injected into pod's environment variables                                   | `true`          |
