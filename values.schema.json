@@ -41,10 +41,15 @@
                     "type": "string"
                 },
                 "existingSecret": {
-                    "type": "string"
-                },
-                "existingSecretKey": {
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                        "key": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    }
                 },
                 "hostname": {
                     "type": "string"
@@ -208,7 +213,7 @@
                 }
             }
         },
-        "postinstalljobs": {
+        "postInstallJobs": {
             "type": "array"
         },
         "priorityClassName": {

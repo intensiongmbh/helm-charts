@@ -87,16 +87,16 @@ Helm Chart for Keycloak by intension
 
 ### Database parameters
 
-| Name                         | Description                                                                        | Value |
-| ---------------------------- | ---------------------------------------------------------------------------------- | ----- |
-| `database.existingSecret`    | Use an existing secret for database password. This takes precedence over password. | `""`  |
-| `database.existingSecretKey` |                                                                                    | `""`  |
-| `database.vendor`            | Can be dev-file, dev-mem, mariadb, mssql, mysql, oracle, postgres                  | `""`  |
-| `database.hostname`          | Hostname of the database                                                           | `""`  |
-| `database.port`              | Port of the database                                                               | `""`  |
-| `database.database`          | The name of the database                                                           | `""`  |
-| `database.username`          | Username of the database                                                           | `""`  |
-| `database.password`          | Password of the database. Ignored if existing secret is set                        | `""`  |
+| Name                           | Description                                                                        | Value |
+| ------------------------------ | ---------------------------------------------------------------------------------- | ----- |
+| `database.existingSecret.name` | Use an existing secret for database password. This takes precedence over password. | `""`  |
+| `database.existingSecret.key`  | The key for the existing secret                                                    | `""`  |
+| `database.vendor`              | Can be dev-file, dev-mem, mariadb, mssql, mysql, oracle, postgres                  | `""`  |
+| `database.hostname`            | Hostname of the database                                                           | `""`  |
+| `database.port`                | Port of the database                                                               | `""`  |
+| `database.database`            | The name of the database                                                           | `""`  |
+| `database.username`            | Username of the database                                                           | `""`  |
+| `database.password`            | Password of the database. Ignored if existing secret is set                        | `""`  |
 
 ### Keycloak exposure parameters
 

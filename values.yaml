@@ -234,10 +234,11 @@ postInstallJobs: []
 ## @section Database parameters
 
 database:
-  ## @param database.existingSecret Use an existing secret for database password. This takes precedence over password.
-  existingSecret: ""
-  ## @param database.existingSecretKey
-  existingSecretKey: ""
+  existingSecret:
+    ## @param database.existingSecret.name Use an existing secret for database password. This takes precedence over password.
+    name: ""
+    ## @param database.existingSecret.key The key for the existing secret
+    key: ""
   ## @param database.vendor Can be dev-file, dev-mem, mariadb, mssql, mysql, oracle, postgres
   vendor: ""
   ## @param database.hostname Hostname of the database
