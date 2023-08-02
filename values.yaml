@@ -209,8 +209,8 @@ autoscaling:
   ## @param autoscaling.labels Labels for the HPA
   labels: {}
 
-## @param postinstalljobs Define a list of jobs to be executed after the installation
-postinstalljobs: []
+## @param postInstallJobs Define a list of jobs to be executed after the installation
+postInstallJobs: []
 #- name: job-name
 #  restartPolicy: Never
 #  hookWeight: 5
