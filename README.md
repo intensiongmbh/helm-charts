@@ -2,9 +2,13 @@
 
 Helm Chart for Keycloak by intension
 
-## Post install jobs
-
-This chart offers the possibility to define jobs that run after the installation. To enforce that it runs after the pod is ready, either use the `--wait` option from `helm install` or define a init container that waits for pod to be ready.
+* [Parameters](#parameters)
+  * [Common parameters](#common-parameters)
+  * [Keycloak parameters](#keycloak-parameters)
+  * [Keycloak deployment parameters](#keycloak-deployment-parameters)
+  * [Database parameters](#database-parameters)
+  * [Keycloak exposure parameters](#keycloak-exposure-parameters)
+* [Post install jobs](#post-install-jobs)
 
 ## Parameters
 
@@ -117,3 +121,7 @@ This chart offers the possibility to define jobs that run after the installation
 | `ingress.annotations`              | Annotations for the ingress                                                                                                                                                                                                                   | `{}`        |
 | `ingress.rules`                    | List of arbitrary paths to the host                                                                                                                                                                                                           | `[]`        |
 | `ingress.tls`                      | List of TLS secrets                                                                                                                                                                                                                           | `[]`        |
+
+## Post install jobs
+
+This chart offers the possibility to define jobs that run after the installation. To enforce that it runs after the pod is ready, either use the `--wait` option from `helm install` or define a init container that waits for pod to be ready.
