@@ -2,9 +2,13 @@
 
 Helm Chart for Keycloak by intension
 
-## Post install jobs
-
-This chart offers the possibility to define jobs that run after the installation. To enforce that it runs after the pod is ready, either use the `--wait` option from `helm install` or define a init container that waits for pod to be ready.
+* [Parameters](#parameters)
+  * [Common parameters](#common-parameters)
+  * [Keycloak parameters](#keycloak-parameters)
+  * [Keycloak deployment parameters](#keycloak-deployment-parameters)
+  * [Database parameters](#database-parameters)
+  * [Keycloak exposure parameters](#keycloak-exposure-parameters)
+* [Post install jobs](#post-install-jobs)
 
 ## Parameters
 
@@ -130,3 +134,7 @@ This Helm chart provides the possibility to create a realm after Keycloak was de
 | `realmCreator.existingSecret`    | Use an existing secret for Keycloak admin password. This takes precedence over password.                                                 | `""`    |
 | `realmCreator.existingSecretKey` |                                                                                                                                          | `""`    |
 | `realmCreator.options`           | Specify how the realms should be created. See [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli) for more information | `""`    |
+
+## Post install jobs
+
+This chart offers the possibility to define jobs that run after the installation. To enforce that it runs after the pod is ready, either use the `--wait` option from `helm install` or define a init container that waits for pod to be ready.
