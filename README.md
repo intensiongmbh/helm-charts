@@ -83,7 +83,7 @@ Helm Chart for Keycloak by intension
 | `autoscaling.targetCPUUtilizationPercentage`    | Target CPU utilization percentage                                                                                                 | `80`            |
 | `autoscaling.targetMemoryUtilizationPercentage` | Target Memory utilization percentage                                                                                              | `nil`           |
 | `autoscaling.labels`                            | Labels for the HPA                                                                                                                | `{}`            |
-| `postinstalljobs`                               | Define a list of jobs to be executed after the installation                                                                       | `[]`            |
+| `postInstallJobs`                               | Define a list of jobs to be executed after the installation                                                                       | `[]`            |
 
 ### Database parameters
 
