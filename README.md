@@ -9,6 +9,7 @@ Helm Chart for Keycloak by intension
   * [Database parameters](#database-parameters)
   * [Keycloak exposure parameters](#keycloak-exposure-parameters)
 * [Post install jobs](#post-install-jobs)
+* [Supported versions](#supported-versions)
 
 ## Parameters
 
@@ -138,3 +139,7 @@ This Helm chart provides the possibility to create a realm after Keycloak was de
 ## Post install jobs
 
 This chart offers the possibility to define jobs that run after the installation. To enforce that it runs after the pod is ready, either use the `--wait` option from `helm install` or define a init container that waits for pod to be ready.
+
+## Supported versions
+
+This chart supports Keycloak version >= 17.0.0 using the Quarkus distribution.
