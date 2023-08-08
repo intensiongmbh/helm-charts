@@ -1,6 +1,10 @@
 {
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
+    "required": [
+        "image",
+        "service"
+    ],
     "properties": {
         "affinity": {
             "type": "object"
@@ -42,6 +46,10 @@
                 },
                 "existingSecret": {
                     "type": "object",
+                    "required": [
+                        "key",
+                        "name"
+                    ],
                     "properties": {
                         "key": {
                             "type": "string"
@@ -110,6 +118,9 @@
         },
         "image": {
             "type": "object",
+            "required": [
+                "repository"
+            ],
             "properties": {
                 "digest": {
                     "type": "string"
@@ -278,6 +289,10 @@
         },
         "service": {
             "type": "object",
+            "required": [
+                "type",
+                "httpPort"
+            ],
             "properties": {
                 "annotations": {
                     "type": "object"
