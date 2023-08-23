@@ -22,7 +22,14 @@ spec:
       restartPolicy: Never
       containers:
       - name: realm-creator
-        image: adorsys/keycloak-config-cli
+        {{- if .Values.realmCreator.image.digest }}
+        image: "{{ .Values.realmCreator.image.repository }}@{{ .Values.realmCreator.image.digest }}"
+        {{- else }}
+        image: "{{ .Values.realmCreator.image.repository }}{{ if .Values.realmCreator.image.tag }}:{{ .Values.realmCreator.image.tag }}{{ end }}"
+        {{- end }}
+        {{- if .Values.realmCreator.image.pullPolicy }}
+        imagePullPolicy: {{ .Values.realmCreator.image.pullPolicy }}
+        {{- end }}
         env: 
           - name: KEYCLOAK_URL
             value: http://{{ include "keycloak.fullname" . }}-headless:8080/{{ if .Values.http.relativePath }}{{ .Values.http.relativePath | trimPrefix "/" }}{{ end }}

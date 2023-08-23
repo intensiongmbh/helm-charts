@@ -315,15 +315,24 @@ ingress:
 realmCreator:
   ## @param realmCreator.enabled Enable the realm creator
   enabled: false
+  image: 
+    ## @param realmCreator.image.repository The image for the realm creator
+    repository: adorsys/keycloak-config-cli
+    ## @param realmCreator.image.pullPolicy Pull policy of the image used for the realm creator
+    pullPolicy: IfNotPresent
+    ## @param realmCreator.image.tag The tag of the image for the realm creator
+    tag: 5.8.0-22.0.0
+    ## @param realmCreator.image.digest Overrides the image tag with a specific digest
+    digest: ""
   ## @param realmCreator.username Specify the username to be used for the Keycloak API
-  username: ""
+  username: admin
   ## @param realmCreator.password Password for the Keycloak user
   password: ""
   ## @param realmCreator.existingSecret Use an existing secret for Keycloak admin password. This takes precedence over password.
   existingSecret: ""
   ## @param realmCreator.existingSecretKey
   existingSecretKey: ""
-  ## @param realmCreator.options Specify how the realms should be created. See [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli) for more information
+  ## @param realmCreator.options Specify how the realms should be created. It contains the JSON as YAML in a string. See [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli) for more information
   options: ""
   # options: |
   #   id: users
