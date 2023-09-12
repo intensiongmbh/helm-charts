@@ -1,11 +1,10 @@
-{{ if .Values.realmCreator.enabled }}
+{{ if .Values.realmCreator.realms }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "keycloak.fullname" . }}-realm-creator-configmap
 data:
-  realm.json: |-
-    {{- .Values.realmCreator.options | nindent 4 }}
+  {{- toYaml .Values.realmCreator.realms | nindent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -50,7 +49,7 @@ spec:
           - name: KEYCLOAK_AVAILABILITYCHECK_TIMEOUT
             value: 60s
           - name: IMPORT_FILES_LOCATION
-            value: /config/realm.json
+            value: /config/*
         volumeMounts:
           - name: keycloak-realm-configfile
             mountPath: "/config"

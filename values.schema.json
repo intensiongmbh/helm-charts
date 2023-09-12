@@ -247,20 +247,17 @@
         "realmCreator": {
             "type": "object",
             "properties": {
-                "enabled": {
-                    "type": "boolean"
-                },
                 "existingSecret": {
                     "type": "string"
                 },
                 "existingSecretKey": {
                     "type": "string"
                 },
-                "options": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
+                },
+                "realms": {
+                    "type": "object"
                 },
                 "username": {
                     "type": "string"

@@ -313,8 +313,15 @@ ingress:
 ## @descriptionEnd
 
 realmCreator:
-  ## @param realmCreator.enabled Enable the realm creator
-  enabled: false
+  ## @param realmCreator.realms Specify how the realms should be created. It contains a dictionary mapping a string for enumeration and the string specifying how the realm should be created. See [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli) for more information
+  realms: {}
+  # realms:
+  #   realm1: |-
+  #     id: users
+  #     realm: users
+  #   realms2: |-
+  #     id: another-realm
+  #     realm: another-realm
   image: 
     ## @param realmCreator.image.repository The image for the realm creator
     repository: adorsys/keycloak-config-cli
@@ -332,8 +339,3 @@ realmCreator:
   existingSecret: ""
   ## @param realmCreator.existingSecretKey
   existingSecretKey: ""
-  ## @param realmCreator.options Specify how the realms should be created. It contains the JSON as YAML in a string. See [keycloak-config-cli](https://github.com/adorsys/keycloak-config-cli) for more information
-  options: ""
-  # options: |
-  #   id: users
-  #   realm: users
