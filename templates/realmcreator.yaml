@@ -1,0 +1,61 @@
+{{ if .Values.realmCreator.realms }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "keycloak.fullname" . }}-realm-creator-configmap
+data:
+  {{- toYaml .Values.realmCreator.realms | nindent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "keycloak.fullname" . }}-realm-creator
+  annotations:
+    "helm.sh/hook": post-install, post-rollback, post-upgrade
+    "helm.sh/hook-weight": {{ .hookWeight | default 5 | quote }}
+spec:
+  template:
+    metadata:
+      name: {{ include "keycloak.fullname" . }}-realm-creator
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: realm-creator
+        {{- if .Values.realmCreator.image.digest }}
+        image: "{{ .Values.realmCreator.image.repository }}@{{ .Values.realmCreator.image.digest }}"
+        {{- else }}
+        image: "{{ .Values.realmCreator.image.repository }}{{ if .Values.realmCreator.image.tag }}:{{ .Values.realmCreator.image.tag }}{{ end }}"
+        {{- end }}
+        {{- if .Values.realmCreator.image.pullPolicy }}
+        imagePullPolicy: {{ .Values.realmCreator.image.pullPolicy }}
+        {{- end }}
+        env: 
+          - name: KEYCLOAK_URL
+            value: http://{{ include "keycloak.fullname" . }}-headless:8080/{{ if .Values.http.relativePath }}{{ .Values.http.relativePath | trimPrefix "/" }}{{ end }}
+          - name: KEYCLOAK_USER
+            value: {{ .Values.realmCreator.username }}
+          {{- if .Values.realmCreator.existingSecret }}
+          - name: KEYCLOAK_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.realmCreator.existingSecret }}
+                key: {{ .Values.realmCreator.existingSecretKey }}
+          {{- else if .Values.realmCreator.password }}
+          - name: KEYCLOAK_PASSWORD
+            value: {{ .Values.realmCreator.password }}
+          {{- end }}
+          - name: KEYCLOAK_AVAILABILITYCHECK_ENABLED
+            value: "true"
+          - name: KEYCLOAK_AVAILABILITYCHECK_TIMEOUT
+            value: 60s
+          - name: IMPORT_FILES_LOCATION
+            value: /config/*
+        volumeMounts:
+          - name: keycloak-realm-configfile
+            mountPath: "/config"
+            readOnly: true
+      volumes:
+        - name: keycloak-realm-configfile
+          configMap:
+            name: {{ include "keycloak.fullname" . }}-realm-creator-configmap
+{{ end }}
