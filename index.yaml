@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  keycloak:
+  - apiVersion: v2
+    appVersion: 22.0.1
+    created: "2023-09-14T10:38:47.750134272Z"
+    description: Keycloak - SSO now within Kubernetes
+    digest: 64006dfe5672b1e18e5f31cdede2d3a1a0554346a20bdb1b6ea987b72228352f
+    name: keycloak
+    type: application
+    urls:
+    - https://github.com/intensiongmbh/keycloak-helm-chart/releases/download/keycloak-0.1.0/keycloak-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-09-14T10:38:47.750140273Z"
