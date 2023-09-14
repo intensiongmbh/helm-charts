@@ -1,3 +1,3 @@
-# Keycloak Helm Chart
+# Helm Charts
 
-Helm Chart for Keycloak by intension
+Helm Charts by intension
