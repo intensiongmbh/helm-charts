@@ -2,7 +2,7 @@
 
 Helm charts by intension.
 
-To install a chart from the repository, run:
+To add the repository for installing a chart from the repository:
 
 ```bash
 helm repo add intension https://helm.intension.de
