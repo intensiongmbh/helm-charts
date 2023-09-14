@@ -2,6 +2,7 @@
 
 Helm Chart for Keycloak by intension
 
+* [Installation](#installation)
 * [Parameters](#parameters)
   * [Common parameters](#common-parameters)
   * [Keycloak parameters](#keycloak-parameters)
@@ -10,6 +11,15 @@ Helm Chart for Keycloak by intension
   * [Keycloak exposure parameters](#keycloak-exposure-parameters)
 * [Post install jobs](#post-install-jobs)
 * [Supported versions](#supported-versions)
+
+## Installation
+
+To install the chart run:
+
+```bash
+helm repo add intension https://helm.intension.de
+helm install keycloak intension/keycloak
+```
 
 ## Parameters
 
