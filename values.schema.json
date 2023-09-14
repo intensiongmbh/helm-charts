@@ -244,6 +244,26 @@
         "readinessProbe": {
             "type": "string"
         },
+        "realmCreator": {
+            "type": "object",
+            "properties": {
+                "existingSecret": {
+                    "type": "string"
+                },
+                "existingSecretKey": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "realms": {
+                    "type": "object"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "replicaCount": {
             "type": "integer"
         },
